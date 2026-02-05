@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Push for Better Challenge</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Spectral:wght@400;600&display=swap');
+
+        :root {
+            --bg: #0b0d10;
+            --bg-deep: #07080a;
+            --panel: rgba(20, 22, 26, 0.9);
+            --panel-strong: rgba(18, 20, 24, 0.96);
+            --card: rgba(24, 27, 33, 0.8);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e7ebf1;
+            --muted: #9aa3af;
+            --accent: #36d399;
+            --accent-strong: #52f5b7;
+            --warning: #f5b942;
+            --danger: #ff5a5f;
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Space Grotesk", "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, rgba(54, 211, 153, 0.12), transparent 55%),
+                        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 40%),
+                        linear-gradient(180deg, #0c0e12 0%, #08090b 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 36px 20px 60px;
+        }
+
+        .app {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            gap: 24px;
+        }
+
+        .header {
+            background: var(--panel-strong);
+            border-radius: 24px;
+            padding: 32px 32px 28px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(54, 211, 153, 0.1), transparent 40%);
+            pointer-events: none;
+        }
+
+        .headline {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .headline h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .headline p {
+            font-family: "Spectral", serif;
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 560px;
+        }
+
+        .stats {
+            margin-top: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid var(--card-border);
+        }
+
+        .stat-card .label {
+            color: var(--muted);
+            font-size: 0.85rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .stat-card .value {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .team-progress {
+            margin-top: 20px;
+            background: var(--card);
+            border-radius: 18px;
+            padding: 18px;
+            border: 1px solid var(--card-border);
+            display: grid;
+            gap: 10px;
+        }
+
+        .team-progress-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .team-progress-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .team-progress-meta {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .team-bar {
+            height: 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .team-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .content {
+            display: grid;
+            gap: 24px;
+        }
+
+        .participants {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+        }
+
+        .participant-card {
+            background: var(--panel);
+            border-radius: 18px;
+            padding: 18px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 14px;
+            justify-items: center;
+            text-align: center;
+        }
+
+        .participant-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .participant-card .count {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .participant-card .meta {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .ring {
+            --size: 120px;
+            width: var(--size);
+            height: var(--size);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            position: relative;
+        }
+
+        .ring::before {
+            content: "";
+            position: absolute;
+            inset: 18px;
+            border-radius: 50%;
+            background: var(--panel-strong);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .ring svg {
+            position: absolute;
+            inset: 0;
+            transform: rotate(-90deg);
+        }
+
+        .ring-track {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 12;
+            fill: none;
+        }
+
+        .ring-fill {
+            stroke: var(--accent);
+            stroke-width: 12;
+            fill: none;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.3s ease;
+        }
+
+        .ring-overflow {
+            stroke: var(--warning);
+            stroke-width: 8;
+            fill: none;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.3s ease;
+        }
+
+        .ring-content {
+            position: relative;
+            display: grid;
+            gap: 2px;
+            text-align: center;
+        }
+
+        .ring-content .percent {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .ring-content .label {
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .log {
+            background: var(--panel);
+            border-radius: 22px;
+            padding: 28px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
+        }
+
+        .log-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .log-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .log-header .meta {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .quick-add-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .quick-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 14px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .quick-card h3 {
+            font-size: 1rem;
+        }
+
+        .quick-card label {
+            color: var(--muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .quick-card input[type="number"] {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 8px 10px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
+        .quick-card button {
+            border-radius: 10px;
+            border: 1px solid rgba(54, 211, 153, 0.4);
+            background: rgba(54, 211, 153, 0.15);
+            color: var(--accent-strong);
+            padding: 10px 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .quick-hint {
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .quick-actions button {
+            flex: 1;
+            border-radius: 10px;
+            border: 1px solid rgba(54, 211, 153, 0.4);
+            background: rgba(54, 211, 153, 0.15);
+            color: var(--accent-strong);
+            padding: 10px 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .quick-actions .reset-btn {
+            border: 1px solid rgba(255, 90, 95, 0.4);
+            background: rgba(255, 90, 95, 0.12);
+            color: var(--danger);
+        }
+
+        @media (max-width: 720px) {
+            .headline {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <section class="header">
+            <div class="headline">
+                <div>
+                    <h1>Push for Better</h1>
+                    <p>From February 5 to February 28, 2026 we are taking on 2,000 push-ups together. Log your daily count below and the totals will update instantly.</p>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="label">Challenge Dates</div>
+                    <div class="value" id="dateRange">Feb 5 - Feb 28, 2026</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Target</div>
+                    <div class="value" id="targetCount">2,000</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Total Completed</div>
+                    <div class="value" id="totalCompleted">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Remaining</div>
+                    <div class="value" id="remainingCount">2,000</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Days Left</div>
+                    <div class="value" id="daysLeft">0</div>
+                </div>
+            </div>
+            <div class="team-progress">
+                <div class="team-progress-header">
+                    <div class="team-progress-title">Team Progress</div>
+                    <div class="team-progress-meta" id="teamProgressMeta">0 / 2,000</div>
+                </div>
+                <div class="team-bar">
+                    <div class="team-bar-fill" id="teamBarFill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="participants" id="participants"></div>
+
+            <div class="log">
+                <div class="log-header">
+                    <h2>Quick Add</h2>
+                    <p class="meta">Slide a number, tap Add, and the slider resets.</p>
+                </div>
+                <div class="quick-add-grid" id="quickAddGrid"></div>
+                <div class="quick-actions">
+                    <button type="button" id="resetBtn" class="reset-btn">Reset all data</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const START_DATE = new Date('2026-02-05T00:00:00');
+        const END_DATE = new Date('2026-02-28T00:00:00');
+        const TARGET = 8000;
+        const INDIVIDUAL_TARGET = 2000;
+        const MAX_PER_DAY = 500;
+        const PARTICIPANTS = ['Shiv', 'Pierre', 'Harjot', 'Pinder', 'Dray', 'Raynold', 'Anoop'];
+        const STORAGE_KEY = 'pushForBetterTotals';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyMmn7GrhPta-vuOEcbl7pVXGqlB8_3ScjZCo2pFS7X63hPyIeiQ42ImNtqxw8Tm3mAuQ/exec';
+
+        let pushupTotals = loadData();
+
+        function isApiConfigured() {
+            return API_URL && API_URL !== 'PASTE_APPS_SCRIPT_URL_HERE';
+        }
+
+        function dateToStr(date) {
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function loadData() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+                return Object.fromEntries(PARTICIPANTS.map(name => [name, 0]));
+            }
+            try {
+                const parsed = JSON.parse(raw);
+                return Object.fromEntries(PARTICIPANTS.map(name => [name, Number(parsed[name] || 0)]));
+            } catch (err) {
+                return Object.fromEntries(PARTICIPANTS.map(name => [name, 0]));
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(pushupTotals));
+            if (!isApiConfigured()) return Promise.resolve();
+            return fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ totals: pushupTotals })
+            }).catch(() => {});
+        }
+
+        async function loadRemoteData() {
+            if (!isApiConfigured()) return false;
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) return false;
+                const data = await response.json();
+                if (!data || typeof data !== 'object' || !data.totals) return false;
+                pushupTotals = Object.fromEntries(
+                    PARTICIPANTS.map(name => [name, Number(data.totals[name] || 0)])
+                );
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(pushupTotals));
+                return true;
+            } catch (err) {
+                return false;
+            }
+        }
+
+        function getTotals() {
+            const totals = Object.fromEntries(PARTICIPANTS.map(name => [name, Number(pushupTotals[name] || 0)]));
+            const overall = Object.values(totals).reduce((sum, value) => sum + value, 0);
+            return { totals, overall };
+        }
+
+        function renderParticipants() {
+            const container = document.getElementById('participants');
+            container.innerHTML = '';
+            const totals = getTotals().totals;
+            const individualTarget = INDIVIDUAL_TARGET;
+
+            PARTICIPANTS.forEach(name => {
+                const card = document.createElement('div');
+                card.className = 'participant-card';
+                const percent = Math.round((totals[name] / individualTarget) * 100);
+                const basePercent = Math.min(100, percent);
+                const overflowPercent = Math.max(0, percent - 100);
+                card.innerHTML = `
+                    <div class="ring">
+                        <svg viewBox="0 0 120 120" aria-hidden="true">
+                            <circle class="ring-track" cx="60" cy="60" r="44"></circle>
+                            <circle class="ring-fill" cx="60" cy="60" r="44"></circle>
+                            <circle class="ring-overflow" cx="60" cy="60" r="52"></circle>
+                        </svg>
+                        <div class="ring-content">
+                            <div class="percent">${percent}%</div>
+                            <div class="label">Goal</div>
+                        </div>
+                    </div>
+                    <h3>${name}</h3>
+                    <div class="count">${totals[name]}</div>
+                    <div class="meta">Goal: ${individualTarget}</div>
+                `;
+                const circumference = 2 * Math.PI * 44;
+                const overflowCircumference = 2 * Math.PI * 52;
+                const fill = (basePercent / 100) * circumference;
+                const overflowFill = (Math.min(100, overflowPercent) / 100) * overflowCircumference;
+
+                const fillCircle = card.querySelector('.ring-fill');
+                const overflowCircle = card.querySelector('.ring-overflow');
+                if (fillCircle) {
+                    fillCircle.setAttribute('stroke-dasharray', `${fill} ${circumference}`);
+                }
+                if (overflowCircle) {
+                    overflowCircle.setAttribute('stroke-dasharray', `${overflowFill} ${overflowCircumference}`);
+                }
+
+                container.appendChild(card);
+            });
+        }
+
+        function renderQuickAdd() {
+            const grid = document.getElementById('quickAddGrid');
+            grid.innerHTML = '';
+
+            PARTICIPANTS.forEach(name => {
+                const card = document.createElement('div');
+                card.className = 'quick-card';
+                card.innerHTML = `
+                    <h3>${name}</h3>
+                    <label>Push-ups to add</label>
+                    <input type="number" min="${-MAX_PER_DAY}" max="${MAX_PER_DAY}" step="1" data-name="${name}" value="">
+                    <div class="quick-hint">Range: -${MAX_PER_DAY} to ${MAX_PER_DAY} per entry</div>
+                    <button type="button" data-add="${name}">Add</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function updateStats() {
+            const { totals, overall } = getTotals();
+            const remaining = Math.max(0, TARGET - overall);
+            const percent = Math.min(100, Math.round((overall / TARGET) * 100));
+
+            document.getElementById('totalCompleted').textContent = overall.toLocaleString('en-US');
+            document.getElementById('remainingCount').textContent = remaining.toLocaleString('en-US');
+
+            const today = new Date();
+            const daysLeft = Math.max(0, Math.ceil((END_DATE - today) / (1000 * 60 * 60 * 24)));
+            document.getElementById('daysLeft').textContent = daysLeft;
+
+            document.getElementById('teamProgressMeta').textContent = `${overall.toLocaleString('en-US')} / ${TARGET.toLocaleString('en-US')} (${percent}%)`;
+            document.getElementById('teamBarFill').style.width = `${percent}%`;
+        }
+
+        function attachListeners() {
+            document.getElementById('quickAddGrid').addEventListener('click', event => {
+                const button = event.target.closest('button[data-add]');
+                if (!button) return;
+                const name = button.getAttribute('data-add');
+                const input = document.querySelector(`input[data-name="${name}"]`);
+                if (!input) return;
+                const amount = Number(input.value || 0);
+                if (!Number.isFinite(amount) || amount === 0) return;
+
+                pushupTotals[name] = Number(pushupTotals[name] || 0) + amount;
+                saveData();
+                input.value = '';
+                renderParticipants();
+                updateStats();
+            });
+
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                if (!confirm('Clear all saved push-up entries?')) return;
+                pushupTotals = Object.fromEntries(PARTICIPANTS.map(name => [name, 0]));
+                saveData();
+                renderQuickAdd();
+                renderParticipants();
+                updateStats();
+            });
+        }
+
+        function init() {
+            document.getElementById('dateRange').textContent = `${formatDate(START_DATE)} - ${formatDate(END_DATE)}`;
+            document.getElementById('targetCount').textContent = TARGET.toLocaleString('en-US');
+
+            renderParticipants();
+            renderQuickAdd();
+            updateStats();
+            attachListeners();
+        }
+
+        (async () => {
+            await loadRemoteData();
+            init();
+        })();
+    </script>
+</body>
+</html>
